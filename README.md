@@ -50,16 +50,19 @@ A comprehensive digital infrastructure enabling transparent market participation
 ### Technical Features
 
 - ✅ **RESTful API** with comprehensive endpoints
+- ✅ **JWT Authentication** - Secure token-based auth with 24-hour expiration
+- ✅ **Role-based Authorization** - BUYER, SUPPLIER, ADMIN with method-level security
 - ✅ **Input Validation** using Jakarta Bean Validation
 - ✅ **Exception Handling** with custom exceptions and global handler
 - ✅ **DTO Pattern** for clean API contracts
 - ✅ **Logging** with SLF4J for debugging and monitoring
 - ✅ **API Documentation** with Swagger/OpenAPI
-- ✅ **Security** with Spring Security (basic configuration)
+- ✅ **Security** with Spring Security and JWT filter
 - ✅ **Testing** with 39 unit and integration tests (100% pass rate)
 - ✅ **Database Migration** with Hibernate auto-update
 - ✅ **Business Rules** - Deadline validation, email uniqueness checks
 - ✅ **Mapper Pattern** - Clean entity-DTO conversion
+- ✅ **Password Encryption** - BCrypt hashing
 
 ## 🏗 Architecture
 
@@ -186,7 +189,62 @@ Once the application is running, access the interactive API documentation:
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON**: http://localhost:8080/v3/api-docs
 
+### Authentication
+
+The API uses JWT (JSON Web Token) for authentication. To access protected endpoints:
+
+1. **Register a new user:**
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_buyer",
+    "email": "john@example.com",
+    "password": "password123",
+    "roles": ["BUYER"]
+  }'
+```
+
+2. **Login to get JWT token:**
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "john_buyer",
+    "password": "password123"
+  }'
+```
+
+Response:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "john_buyer",
+  "roles": ["BUYER"]
+}
+```
+
+3. **Use the token in subsequent requests:**
+```bash
+curl -X GET http://localhost:8080/api/opportunities \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### User Roles & Permissions
+
+| Role | Permissions |
+|------|-------------|
+| **BUYER** | Create opportunities, publish opportunities, view all opportunities, create contracts |
+| **SUPPLIER** | Submit bids, register as supplier, update supplier profile, view opportunities |
+| **ADMIN** | Full access to all endpoints |
+
 ### API Endpoints
+
+#### Authentication
+```
+POST   /api/auth/register              - Register new user (public)
+POST   /api/auth/login                 - Login and get JWT token (public)
+```
 
 #### Opportunities
 ```
@@ -346,21 +404,22 @@ The application includes Spring Security with basic configuration:
 ## ✅ Implemented Features
 
 - ✅ **RESTful API** - Complete CRUD operations for all entities
+- ✅ **JWT Authentication** - Secure token-based authentication
+- ✅ **Role-based Access Control** - BUYER, SUPPLIER, ADMIN roles with permissions
 - ✅ **Exception Handling** - Custom exceptions with global handler
 - ✅ **Input Validation** - Jakarta Bean Validation on all DTOs
 - ✅ **DTO Pattern** - Clean separation between API and domain models
 - ✅ **Logging** - SLF4J logging throughout the application
 - ✅ **API Documentation** - Swagger/OpenAPI with interactive UI
-- ✅ **Security Configuration** - Spring Security setup (ready for JWT)
+- ✅ **Security Configuration** - Spring Security with JWT filter
 - ✅ **Comprehensive Testing** - 39 unit and integration tests
 - ✅ **Database Integration** - PostgreSQL with Hibernate ORM
 - ✅ **Business Logic** - Deadline validation, email uniqueness, status workflows
 - ✅ **Mapper Pattern** - Entity-DTO conversion with dedicated mappers
+- ✅ **Password Encryption** - BCrypt password hashing
 
 ## 🚧 Future Enhancements
 
-- [ ] JWT Authentication & Authorization
-- [ ] Role-based Access Control (BUYER, SUPPLIER, ADMIN)
 - [ ] File Upload for documents
 - [ ] Email Notifications
 - [ ] Pagination & Advanced Filtering
