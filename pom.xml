@@ -35,19 +35,8 @@
         <opentelemetry.version>1.32.0</opentelemetry.version>
     </properties>
 
-    <modules>
-        <module>common</module>
-        <module>procurement-service</module>
-        <module>supplier-registry-service</module>
-        <module>contract-management-service</module>
-        <module>market-data-service</module>
-        <module>compliance-reporting-service</module>
-        <module>notification-service</module>
-        <module>search-service</module>
-        <module>analytics-service</module>
-        <module>api-gateway</module>
-        <module>iam-service</module>
-    </modules>
+    <!-- This is a parent POM for future microservices architecture -->
+    <!-- Currently using simple-pom.xml for monolithic application -->
 
     <dependencyManagement>
         <dependencies>
